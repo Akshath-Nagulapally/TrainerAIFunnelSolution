@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --mint: #D4FFF4;
+  --gray-text: #A5A4A4;
+  --gray-bg: #E5E5E5;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-mint: var(--mint);
+  --color-gray-text: var(--gray-text);
+  --color-gray-bg: var(--gray-bg);
+  --font-sans: var(--font-onest);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-onest), sans-serif;
+  min-height: 100vh;
+}
+
+/* Ensure light mode only */
+html {
+  color-scheme: light;
+}
