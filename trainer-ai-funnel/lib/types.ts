@@ -43,6 +43,15 @@ export interface InfoScreenData {
   };
   showPaginationDots?: boolean;
   totalPages?: number;
+  // Optional audio for "Try It" button
+  tryItAudio?: {
+    en: string;
+    es: string;
+  };
+  tryItButtonText?: {
+    en: string;
+    es: string;
+  };
 }
 
 // Onboarding state

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Onest } from "next/font/google";
 import "./globals.css";
 import { OnboardingProvider } from "@/context/OnboardingContext";
+import { ImagePreloader } from "@/components/ImagePreloader";
 
 const onest = Onest({
   variable: "--font-onest",
@@ -36,6 +37,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${onest.variable} font-sans antialiased bg-white`}>
         <OnboardingProvider>
+          <ImagePreloader />
           {children}
         </OnboardingProvider>
       </body>

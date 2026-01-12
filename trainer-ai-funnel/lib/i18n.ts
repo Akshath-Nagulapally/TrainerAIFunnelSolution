@@ -98,10 +98,16 @@ export const translations = {
   // Infographics
   currentBodyTitle: { en: 'Where are you right now?', es: '¿Dónde estás ahora mismo?' },
   idealBodyTitle: { en: 'Where do you want to be?', es: '¿Dónde quieres estar?' },
-  notHardTitle: { en: "It's not as hard as you think", es: 'No es tan difícil como crees' },
+  notHardTitle: { en: "Getting there is not hard at all! It's very realistic.", es: '¡Llegar allí no es difícil en absoluto! Es muy realista.' },
+  notHardSubtitle: { en: 'Studies show that consistent exercise can boost speed of results by 30-40%', es: 'Los estudios muestran que el ejercicio constante puede aumentar la velocidad de los resultados en un 30-40%' },
   longTermTitle: { en: 'Long-term consistency beats short-term intensity', es: 'La consistencia a largo plazo supera la intensidad a corto plazo' },
   ninetySixTitle: { en: '96% of attempts fail without structured support.', es: 'El 96% de los intentos fallan sin apoyo estructurado.' },
   favouriteExcuseTitle: { en: "We've all been there", es: 'Todos hemos estado ahí' },
+  
+  // FavouriteExcuse screen
+  youLabel: { en: 'You', es: 'Tú' },
+  trainerAILabel: { en: 'Trainer AI', es: 'Trainer AI' },
+  demoDisclaimer: { en: '*this is a pre-recorded demo', es: '*esta es una demostración pregrabada' },
 
   // Demo
   personalizingExperience: { en: 'Personalizing your experience', es: 'Personalizando tu experiencia' },

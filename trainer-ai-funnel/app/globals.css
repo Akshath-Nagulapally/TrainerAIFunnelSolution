@@ -28,3 +28,8 @@ body {
 html {
   color-scheme: light;
 }
+
+/* Timeline gradient for paywall */
+.timeline-gradient {
+  background: linear-gradient(to bottom, #9B8AE8, #7BC5E6, #7CE8C9);
+}

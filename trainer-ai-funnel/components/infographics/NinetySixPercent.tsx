@@ -1,6 +1,7 @@
 'use client';
 
-import { useOnboarding } from '@/context/OnboardingContext';
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface NinetySixPercentProps {
   onSelectBody?: (bodyFat: string) => void;
@@ -8,48 +9,32 @@ interface NinetySixPercentProps {
 
 export function NinetySixPercent({ onSelectBody }: NinetySixPercentProps) {
   void onSelectBody;
-  const { state } = useOnboarding();
-  void state;
+  const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="flex flex-col h-full">
-      <h1 className="text-[22px] font-semibold text-black mb-1">
+    <div className="flex flex-col h-full overflow-hidden">
+      <h1 className="text-[22px] font-semibold text-black mb-4 flex-shrink-0">
         <span className="text-red-500">*</span>
         96% of attempts fail without structured support.
       </h1>
       
-      <p className="text-[#A5A4A4] font-semibold text-lg mb-4">Why?</p>
-      
-      <div className="flex-1 flex flex-col justify-center gap-3">
-        <div className="bg-[#D4FFF4] rounded-xl p-3 flex items-center gap-3">
-          <span className="text-xl">🎯</span>
-          <div>
-            <p className="font-semibold text-sm">No clear plan</p>
-            <p className="text-xs text-[#A5A4A4]">Without structure, motivation fades</p>
+      <div className="flex-1 overflow-y-auto flex justify-center relative">
+        {/* Loading spinner */}
+        {!isLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
+            <div className="w-8 h-8 border-3 border-gray-200 border-t-black rounded-full animate-spin" />
           </div>
-        </div>
-        
-        <div className="bg-[#D4FFF4] rounded-xl p-3 flex items-center gap-3">
-          <span className="text-xl">📅</span>
-          <div>
-            <p className="font-semibold text-sm">No accountability</p>
-            <p className="text-xs text-[#A5A4A4]">It&apos;s easy to skip when no one knows</p>
-          </div>
-        </div>
-        
-        <div className="bg-[#D4FFF4] rounded-xl p-3 flex items-center gap-3">
-          <span className="text-xl">💪</span>
-          <div>
-            <p className="font-semibold text-sm">No daily motivation</p>
-            <p className="text-xs text-[#A5A4A4]">Willpower alone isn&apos;t enough</p>
-          </div>
-        </div>
+        )}
+        <Image
+          src="ninetysixpercent_reasons_image.png"
+          alt="96% of attempts fail - reasons"
+          width={300}
+          height={450}
+          className={`max-w-[280px] h-auto object-contain transition-opacity duration-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          priority
+          onLoad={() => setIsLoaded(true)}
+        />
       </div>
-
-      <p className="text-[#A5A4A4] text-xs text-center mt-3">
-        *96% of attempts fail without structured support.
-      </p>
     </div>
   );
 }
-

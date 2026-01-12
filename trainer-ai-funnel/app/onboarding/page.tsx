@@ -44,7 +44,9 @@ function ResetHandler() {
   useEffect(() => {
     if (searchParams.get('reset') === '1') {
       localStorage.removeItem('onboardingState');
-      goToStep(0);
+      const stepParam = searchParams.get('step');
+      const step = stepParam ? parseInt(stepParam, 10) : 0;
+      goToStep(step);
       router.replace('/onboarding');
     }
   }, [searchParams, goToStep, router]);
@@ -55,6 +57,7 @@ function ResetHandler() {
 export default function OnboardingPage() {
   const { state, nextStep, prevStep, setAnswer } = useOnboarding();
   const [showPaywall, setShowPaywall] = useState(false);
+  const router = useRouter();
   
   const currentScreen = screens[state.currentStep];
   
@@ -78,7 +81,7 @@ export default function OnboardingPage() {
   const handleContinue = () => {
     // Check if we're on the notification screen (last screen before paywall)
     if (currentScreen.id === 'notification') {
-      setShowPaywall(true);
+      router.push('/paywall');
     } else {
       nextStep();
     }
@@ -91,7 +94,8 @@ export default function OnboardingPage() {
 
   const handleStartTrial = () => {
     setShowPaywall(false);
-    nextStep();
+    // Redirect to download page on successful payment
+    router.push('/download');
   };
 
   // Determine which page in pagination (for tutorial screens)
@@ -140,6 +144,10 @@ export default function OnboardingPage() {
             priceInfo={currentScreen.id === 'payment' || currentScreen.id === 'notification' 
               ? t('paymentPriceInfo', state.language) 
               : undefined}
+            tryItAudio={screenData.tryItAudio?.[state.language]}
+            tryItButtonText={screenData.tryItButtonText?.[state.language]}
+            showLoadingAnimation={currentScreen.id === 'demo'}
+            loadingDuration={3000}
           />
         );
       }
