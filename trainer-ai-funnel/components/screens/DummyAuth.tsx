@@ -52,6 +52,7 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
     });
   };
 
+  /* Commented out for now
   const handleAppleSignIn = async () => {
     setIsLoading(true);
     const supabase = createClient();
@@ -62,6 +63,7 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
       },
     });
   };
+  */
 
   return (
     <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-white">
@@ -102,7 +104,7 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
               </span>
             </button>
 
-            {/* Apple Sign In */}
+            {/* Apple Sign In commented out for now
             <button
               onClick={handleAppleSignIn}
               disabled={isLoading}
@@ -115,6 +117,7 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
                 {isLoading ? 'Redirecting...' : t('signInWithApple', state.language)}
               </span>
             </button>
+            */}
 
           </div>
         ) : (
