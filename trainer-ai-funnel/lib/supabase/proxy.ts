@@ -6,11 +6,21 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  // Check for required environment variables
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('Missing Supabase environment variables')
+    // Allow request to continue without auth check if env vars are missing
+    return supabaseResponse
+  }
+
   // With Fluid compute, don't put this client in a global environment
   // variable. Always create a new one on each request.
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() {
@@ -27,27 +37,32 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
+  try {
+    // Do not run code between createServerClient and
+    // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
+    // issues with users being randomly logged out.
 
-  // IMPORTANT: If you remove getClaims() and you use server-side rendering
-  // with the Supabase client, your users may be randomly logged out.
-  const { data } = await supabase.auth.getClaims()
+    // IMPORTANT: If you remove getClaims() and you use server-side rendering
+    // with the Supabase client, your users may be randomly logged out.
+    const { data } = await supabase.auth.getClaims()
 
-  const user = data?.claims
+    const user = data?.claims
 
-  // Allow unauthenticated access to public routes (onboarding funnel)
-  const publicPaths = ['/', '/onboarding', '/download', '/auth', '/paywall']
-  const isPublicPath = publicPaths.some(path => 
-    request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path + '/')
-  )
+    // Allow unauthenticated access to public routes (onboarding funnel)
+    const publicPaths = ['/', '/onboarding', '/download', '/auth', '/paywall']
+    const isPublicPath = publicPaths.some(path => 
+      request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path + '/')
+    )
 
-  if (!user && !isPublicPath) {
-    // no user, redirect to home/onboarding
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+    if (!user && !isPublicPath) {
+      // no user, redirect to home/onboarding
+      const url = request.nextUrl.clone()
+      url.pathname = '/'
+      return NextResponse.redirect(url)
+    }
+  } catch (error) {
+    console.error('Middleware auth error:', error)
+    // Continue without auth check if there's an error
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
