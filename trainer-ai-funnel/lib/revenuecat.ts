@@ -44,19 +44,20 @@ export async function aliasRevenueCat(newUserId: string): Promise<void> {
   }
 
   const currentId = purchases.getAppUserId();
-  // We consider it anonymous if RevenueCat says so OR if it matches our anon ID pattern
   const isAnonymous = purchases.isAnonymous() || currentId.startsWith('anon_');
   
-  // Only alias if the current ID is anonymous and different from the new one
-  if (isAnonymous && currentId !== newUserId) {
+  if (currentId !== newUserId) {
     try {
       console.log(`Attempting UUID Swap: ${currentId} -> ${newUserId}`);
-      // identifyUser creates an alias if the current user is anonymous
-      await purchases.identifyUser(newUserId);
+      const loginFn = (Purchases as unknown as { logIn: (id: string) => Promise<{ created?: boolean }> }).logIn;
+      const result = await loginFn(newUserId);
+      const createdFlag = typeof result === 'object' && result && 'created' in result
+        ? String((result as { created?: boolean }).created)
+        : 'unknown';
+      console.log(`RevenueCat logIn completed. created: ${createdFlag}`);
       
-      // Verify the swap
-      const updatedId = purchases.getAppUserId();
-      const updatedIsAnonymous = purchases.isAnonymous();
+      const updatedId = Purchases.getSharedInstance().getAppUserId();
+      const updatedIsAnonymous = Purchases.getSharedInstance().isAnonymous();
       
       if (updatedId === newUserId) {
         console.log(`UUID Swap verified! New App User ID: ${updatedId} (IsAnonymous: ${updatedIsAnonymous})`);
@@ -64,10 +65,11 @@ export async function aliasRevenueCat(newUserId: string): Promise<void> {
         console.warn(`UUID Swap verification failed! Expected: ${newUserId}, but RevenueCat still says: ${updatedId}`);
       }
 
-      // Cleanup anon ID from storage after successful merge
-      localStorage.removeItem(ANON_ID_KEY);
+      if (isAnonymous || currentId.startsWith('anon_')) {
+        localStorage.removeItem(ANON_ID_KEY);
+      }
     } catch (e) {
-      console.error('Error during UUID Swap:', e);
+      console.error('Error during UUID Swap/logIn:', e);
     }
   } else {
     console.log(`No swap needed. Current ID: ${currentId}, New ID: ${newUserId}, IsAnonymous: ${isAnonymous}`);
@@ -77,4 +79,3 @@ export async function aliasRevenueCat(newUserId: string): Promise<void> {
 export function getPurchases(): Purchases | null {
   return purchasesInstance;
 }
-
