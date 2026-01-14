@@ -34,7 +34,7 @@ export const translations = {
   workoutOptionEveryday: { en: 'Everyday', es: 'Todos los días' },
 
   // Auth
-  authTitle: { en: 'Sign in/up', es: 'Iniciar sesión/registrarse' },
+  authTitle: { en: 'Payment Success! Sign in/up', es: 'Pago exitoso! Iniciar sesión/registrarse' },
   signInWithGoogle: { en: 'Sign in with Google', es: 'Inicia sesión con Google' },
   signInWithApple: { en: 'Sign in with Apple', es: 'Inicia sesión con Apple' },
   orDivider: { en: 'OR', es: 'O' },
