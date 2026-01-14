@@ -44,7 +44,8 @@ export async function aliasRevenueCat(newUserId: string): Promise<void> {
   }
 
   const currentId = purchases.getAppUserId();
-  const isAnonymous = purchases.isAnonymous();
+  // We consider it anonymous if RevenueCat says so OR if it matches our anon ID pattern
+  const isAnonymous = purchases.isAnonymous() || currentId.startsWith('anon_');
   
   // Only alias if the current ID is anonymous and different from the new one
   if (isAnonymous && currentId !== newUserId) {
