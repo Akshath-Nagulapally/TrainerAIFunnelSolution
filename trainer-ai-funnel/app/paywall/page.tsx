@@ -28,14 +28,8 @@ export default function PaywallPage() {
         let purchases = getPurchases();
         
         if (!purchases) {
-          const supabase = createClient();
-          const { data: { user } } = await supabase.auth.getUser();
-          if (user) {
-            purchases = configureRevenueCat(user.id);
-          } else {
-            router.push('/onboarding');
-            return;
-          }
+          // No user session required anymore for initial configuration
+          purchases = configureRevenueCat();
         }
 
         const offerings = await Purchases.getSharedInstance().getOfferings();
@@ -88,7 +82,8 @@ export default function PaywallPage() {
       }
 
       const { customerInfo } = await purchases.purchasePackage(selectedPackage);
-      router.push('/download');
+      console.log('Purchase successful! Redirecting to account creation...');
+      router.push('/onboarding?step=auth');
     } catch (e: any) {
       if (!e.userCancelled) {
         if (e.message?.includes('This product is already active for the user')) {

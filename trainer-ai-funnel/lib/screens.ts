@@ -16,20 +16,22 @@ export const screens: ScreenConfig[] = [
     type: 'question' as const,
     template: 'QuestionScreen',
   })),
-  
-  // Auth (1 screen)
-  { id: 'auth', type: 'custom', template: 'DummyAuth' },
-  
+
   // Goals (survey questions and infographics)
-  ...surveyQuestions.map(q => ({
-    id: q.id,
-    type: q.type,
-    template: q.type === 'question' ? 'QuestionScreen' : 'InfographicScreen',
-  })),
+  ...surveyQuestions
+    .filter(q => q.id !== 'personalize')
+    .map(q => ({
+      id: q.id,
+      type: q.type,
+      template: q.type === 'question' ? 'QuestionScreen' : 'InfographicScreen',
+    })),
   
   // Payment (3 screens)
   { id: 'payment', type: 'info', template: 'InfoScreen' },
   { id: 'notification', type: 'info', template: 'InfoScreen' },
+
+  // Auth (1 screen) - Moved to after paywall
+  { id: 'auth', type: 'custom', template: 'DummyAuth' },
 ];
 
 export const totalScreens = screens.length;

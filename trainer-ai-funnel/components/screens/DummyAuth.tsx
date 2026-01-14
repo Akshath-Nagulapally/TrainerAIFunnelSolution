@@ -6,7 +6,8 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { t } from '@/lib/i18n';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { configureRevenueCat } from '@/lib/revenuecat';
+import { configureRevenueCat, aliasRevenueCat } from '@/lib/revenuecat';
+import { useRouter } from 'next/navigation';
 
 interface DummyAuthProps {
   onContinue: () => void;
@@ -18,6 +19,7 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter();
 
   // Check if user is already signed in on mount
   useEffect(() => {
@@ -27,18 +29,23 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
       if (user) {
         setIsSignedIn(true);
         setUserId(user.id);
+        // If they are already signed in, we should alias if needed
+        await aliasRevenueCat(user.id);
       }
       setIsCheckingAuth(false);
     };
     checkAuth();
   }, []);
 
-  const handleContinue = () => {
-    // Configure RevenueCat with the user's ID
+  const handleContinue = async () => {
+    // Ensure RevenueCat is aliased/configured with the user's ID
     if (userId) {
-      configureRevenueCat(userId);
+      await aliasRevenueCat(userId);
+      // After auth is complete, redirect to download page
+      router.push('/download');
+    } else {
+      onContinue();
     }
-    onContinue();
   };
 
   const handleGoogleSignIn = async () => {

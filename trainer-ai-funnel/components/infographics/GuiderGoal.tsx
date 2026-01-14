@@ -35,17 +35,17 @@ interface GuiderGoalProps {
 export function GuiderGoal({ onSelectBody }: GuiderGoalProps) {
   void onSelectBody;
   return (
-    <div className="flex flex-col items-start w-full max-w-md mx-auto px-6">
-      <h1 className="text-2xl font-bold text-black mb-8">Lets move onto goals.</h1>
+    <div className="flex flex-col justify-center w-full h-full">
+      <h1 className="text-4xl font-bold text-black mb-12 text-center">Lets move onto goals.</h1>
       {steps.map((step, index) => (
         <React.Fragment key={step.number}>
           {/* Step Row */}
-          <div className="flex gap-6 items-start w-full">
+          <div className="flex gap-8 items-center w-full">
             {/* Circle */}
             <div className="flex-shrink-0">
               <div
                 className={`
-                  w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0
+                  w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold flex-shrink-0
                   ${
                     step.current
                       ? 'bg-red-500 text-white border-4 border-red-600 shadow-lg'
@@ -58,11 +58,11 @@ export function GuiderGoal({ onSelectBody }: GuiderGoalProps) {
             </div>
 
             {/* Text */}
-            <div className="flex flex-col justify-center flex-1 pt-2">
-              <h3 className="text-2xl font-bold text-black">
+            <div className="flex flex-col justify-center flex-1">
+              <h3 className="text-3xl font-bold text-black">
                 {step.title}
               </h3>
-              <p className="text-sm text-gray-400 leading-snug">
+              <p className="text-lg text-gray-400 leading-snug mt-1">
                 {step.description}
               </p>
             </div>
@@ -70,8 +70,8 @@ export function GuiderGoal({ onSelectBody }: GuiderGoalProps) {
 
           {/* Connecting Line */}
           {index < steps.length - 1 && (
-            <div className="flex-shrink-0 ml-8">
-              <div className="w-1 h-12 bg-black"></div>
+            <div className="flex-shrink-0 ml-12">
+              <div className="w-1 h-16 bg-black"></div>
             </div>
           )}
         </React.Fragment>

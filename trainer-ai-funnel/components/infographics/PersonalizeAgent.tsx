@@ -2,6 +2,7 @@
 
 import { useOnboarding } from '@/context/OnboardingContext';
 import { t } from '@/lib/i18n';
+import { UserCircle } from 'lucide-react';
 
 interface PersonalizeAgentProps {
   isRevealed?: boolean;
@@ -67,8 +68,36 @@ export function PersonalizeAgent({ isRevealed = false }: PersonalizeAgentProps) 
           </div>
         </div>
 
-        {/* Overlapping Avatar Circle - no text inside */}
-        <div className="absolute -top-[90px] left-1/2 -translate-x-1/2 w-[180px] h-[180px] rounded-full border-[8px] border-black bg-[#E6C9A8] shadow-sm z-10 overflow-hidden" />
+        {/* Enhanced Avatar Circle with Reveal Animation */}
+        <div 
+          className={`absolute -top-[90px] left-1/2 -translate-x-1/2 w-[180px] h-[180px] rounded-full border-[8px] border-black z-10 overflow-hidden transition-all duration-500 ease-in-out ${
+            isRevealed 
+              ? 'shadow-lg transform scale-105' 
+              : 'shadow-sm bg-[#E6C9A8]'
+          }`}
+          style={{
+            background: isRevealed 
+              ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' 
+              : '#E6C9A8'
+          }}
+        >
+          {/* Enhanced Profile Picture Content */}
+          {isRevealed ? (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-3">
+              {/* Professional User Icon */}
+              <div className="w-[100px] h-[100px] rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <UserCircle className="w-[60px] h-[60px] text-white" strokeWidth={1.5} />
+              </div>
+              {/* Agent Number */}
+              <span className="text-white text-2xl font-bold">Agent #5</span>
+            </div>
+          ) : (
+            /* Placeholder for unrevealed state */
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="w-[60px] h-[60px] rounded-full bg-[#D4B996]"></div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

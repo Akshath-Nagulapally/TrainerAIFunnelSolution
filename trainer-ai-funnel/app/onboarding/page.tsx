@@ -8,6 +8,7 @@ import { QuestionScreen } from '@/components/templates/QuestionScreen';
 import { InfographicScreen } from '@/components/templates/InfographicScreen';
 import { DummyAuth } from '@/components/screens/DummyAuth';
 import { PaywallModal } from '@/components/PaywallModal';
+import { getPurchases, configureRevenueCat } from '@/lib/revenuecat';
 import { SlideTransition } from '@/components/ui/SlideTransition';
 import { BasicsFlow } from '@/components/BasicsFlow';
 import { GoalsFlow } from '@/components/GoalsFlow';
@@ -43,7 +44,7 @@ const infographicComponents: Record<string, React.ComponentType<{ onSelectBody?:
   SocialCred,
 };
 
-function ResetHandler() {
+function StepHandler() {
   const { goToStep } = useOnboarding();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -55,6 +56,17 @@ function ResetHandler() {
       const step = stepParam ? parseInt(stepParam, 10) : 0;
       goToStep(step);
       router.replace('/onboarding');
+      return;
+    }
+
+    const stepId = searchParams.get('step');
+    if (stepId === 'auth') {
+      const authIndex = screens.findIndex(s => s.id === 'auth');
+      if (authIndex !== -1) {
+        goToStep(authIndex);
+        // Clear the search param so it doesn't keep resetting
+        router.replace('/onboarding');
+      }
     }
   }, [searchParams, goToStep, router]);
   
@@ -87,6 +99,11 @@ export default function OnboardingPage() {
   }
 
   const handleContinue = () => {
+    // Configure RevenueCat at the very first interaction (tutorial stage)
+    if (state.currentStep === 0) {
+      configureRevenueCat();
+    }
+
     // Check if we're on the notification screen (last screen before paywall)
     if (currentScreen.id === 'notification') {
       router.push('/paywall');
@@ -273,9 +290,9 @@ export default function OnboardingPage() {
   };
 
   return (
-    <>
+    <main className="min-h-screen bg-white">
       <Suspense fallback={null}>
-        <ResetHandler />
+        <StepHandler />
       </Suspense>
       <SlideTransition stepKey={state.currentStep}>
         {renderScreen()}
@@ -285,7 +302,7 @@ export default function OnboardingPage() {
         onClose={handlePaywallClose}
         onStartTrial={handleStartTrial}
       />
-    </>
+    </main>
   );
 }
 

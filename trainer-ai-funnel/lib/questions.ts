@@ -82,6 +82,15 @@ export const surveyQuestions: QuestionConfig[] = [
     type: 'infographic',
     component: 'PersonalizeAgent',
   },
+  {
+    id: 'appStoreOnly',
+    type: 'question',
+    question: { en: 'Trainer AI is only on app store (for now).', es: 'Trainer AI está solo en la App Store (por ahora).' },
+    options: {
+      en: ['I understand'],
+      es: ['Entiendo'],
+    },
+  },
   // Goals section
   {
     id: 'guiderGoal',
