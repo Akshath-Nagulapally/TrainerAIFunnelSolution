@@ -89,7 +89,6 @@ export function PersonalizeAgent({ isRevealed = false }: PersonalizeAgentProps) 
                 <UserCircle className="w-[60px] h-[60px] text-white" strokeWidth={1.5} />
               </div>
               {/* Agent Number */}
-              <span className="text-white text-2xl font-bold">Agent #5</span>
             </div>
           ) : (
             /* Placeholder for unrevealed state */
