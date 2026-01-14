@@ -68,7 +68,7 @@ export function ImagePreloader() {
 
   useEffect(() => {
     // Get images for next few screens
-    const imagesToPreload = getUpcomingImages(state.currentStep, 5);
+    const imagesToPreload = getUpcomingImages(state.currentStep, 3); // Reduced from 5 to 3 for better performance
     
     // Preload each image
     imagesToPreload.forEach((src) => {
@@ -76,19 +76,6 @@ export function ImagePreloader() {
       img.src = getCloudinaryUrl(src);
     });
   }, [state.currentStep]);
-
-  // Also preload all images on initial mount for best experience
-  useEffect(() => {
-    // Preload all images after a small delay to not block initial render
-    const timer = setTimeout(() => {
-      allImages.forEach((src) => {
-        const img = new Image();
-        img.src = getCloudinaryUrl(src);
-      });
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   return null; // This component doesn't render anything
 }

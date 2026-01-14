@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
 import { Language, OnboardingState, OnboardingContextType } from '@/lib/types';
 import { screens } from '@/lib/screens';
 
@@ -65,7 +65,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     }));
   }, []);
 
-  const value: OnboardingContextType = {
+  const value: OnboardingContextType = useMemo(() => ({
     state,
     setLanguage,
     setAnswer,
@@ -73,7 +73,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     prevStep,
     goToStep,
     totalSteps: screens.length,
-  };
+  }), [state, setLanguage, setAnswer, nextStep, prevStep, goToStep]);
 
   return (
     <OnboardingContext.Provider value={value}>

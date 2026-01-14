@@ -30,6 +30,7 @@ interface InfoScreenProps {
   tryItButtonText?: string;
   showLoadingAnimation?: boolean;
   loadingDuration?: number; // in milliseconds
+  priority?: boolean;
 }
 
 export function InfoScreen({
@@ -52,6 +53,7 @@ export function InfoScreen({
   tryItButtonText,
   showLoadingAnimation = false,
   loadingDuration = 3000,
+  priority = false,
 }: InfoScreenProps) {
   const { state } = useOnboarding();
   const progress = calculateProgress(state.currentStep);
@@ -212,7 +214,7 @@ export function InfoScreen({
                     alt="Demo"
                     fill
                     className="object-contain"
-                    priority
+                    priority={priority}
                   />
                   {/* Try It Button - positioned in center of phone frame */}
                   {tryItAudio && tryItButtonText && (

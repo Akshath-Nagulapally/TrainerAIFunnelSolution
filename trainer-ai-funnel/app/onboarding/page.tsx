@@ -12,21 +12,22 @@ import { SlideTransition } from '@/components/ui/SlideTransition';
 import { BasicsFlow } from '@/components/BasicsFlow';
 import { GoalsFlow } from '@/components/GoalsFlow';
 
-// Infographics
-import { GuiderGoal } from '@/components/infographics/GuiderGoal';
-import { PersonalizeAgent } from '@/components/infographics/PersonalizeAgent';
-import { CurrentBodyComposition } from '@/components/infographics/CurrentBodyComposition';
-import { IdealBodyComposition } from '@/components/infographics/IdealBodyComposition';
-import { NotHardAtAll } from '@/components/infographics/NotHardAtAll';
-import { LongTermConsistency } from '@/components/infographics/LongTermConsistency';
-import { NinetySixPercent } from '@/components/infographics/NinetySixPercent';
-import { FavouriteExcuse } from '@/components/infographics/FavouriteExcuse';
-import { GoalChart } from '@/components/infographics/GoalChart';
-import { SocialCred } from '@/components/infographics/SocialCred';
-
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { t } from '@/lib/i18n';
+import dynamic from 'next/dynamic';
+
+// Dynamically import infographics
+const GuiderGoal = dynamic(() => import('@/components/infographics/GuiderGoal').then(mod => mod.GuiderGoal), { ssr: false });
+const PersonalizeAgent = dynamic(() => import('@/components/infographics/PersonalizeAgent').then(mod => mod.PersonalizeAgent), { ssr: false });
+const CurrentBodyComposition = dynamic(() => import('@/components/infographics/CurrentBodyComposition').then(mod => mod.CurrentBodyComposition), { ssr: false });
+const IdealBodyComposition = dynamic(() => import('@/components/infographics/IdealBodyComposition').then(mod => mod.IdealBodyComposition), { ssr: false });
+const NotHardAtAll = dynamic(() => import('@/components/infographics/NotHardAtAll').then(mod => mod.NotHardAtAll), { ssr: false });
+const LongTermConsistency = dynamic(() => import('@/components/infographics/LongTermConsistency').then(mod => mod.LongTermConsistency), { ssr: false });
+const NinetySixPercent = dynamic(() => import('@/components/infographics/NinetySixPercent').then(mod => mod.NinetySixPercent), { ssr: false });
+const FavouriteExcuse = dynamic(() => import('@/components/infographics/FavouriteExcuse').then(mod => mod.FavouriteExcuse), { ssr: false });
+const GoalChart = dynamic(() => import('@/components/infographics/GoalChart').then(mod => mod.GoalChart), { ssr: false });
+const SocialCred = dynamic(() => import('@/components/infographics/SocialCred').then(mod => mod.SocialCred), { ssr: false });
 
 // Map of infographic components
 const infographicComponents: Record<string, React.ComponentType<{ onSelectBody?: (bodyFat: string) => void }>> = {
@@ -164,6 +165,7 @@ export default function OnboardingPage() {
             tryItButtonText={screenData.tryItButtonText?.[state.language]}
             showLoadingAnimation={currentScreen.id === 'demo'}
             loadingDuration={3000}
+            priority={state.currentStep === 0}
           />
         );
       }
