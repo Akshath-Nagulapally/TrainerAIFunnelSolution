@@ -85,7 +85,7 @@ export const surveyQuestions: QuestionConfig[] = [
   {
     id: 'appStoreOnly',
     type: 'question',
-    question: { en: 'Trainer AI is only on app store (for now).', es: 'Trainer AI está solo en la App Store (por ahora).' },
+    question: { en: 'Trainer AI is only on Apple App Store (for now).', es: 'Trainer AI está solo en la Apple App Store (por ahora).' },
     options: {
       en: ['I understand'],
       es: ['Entiendo'],
