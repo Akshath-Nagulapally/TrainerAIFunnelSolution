@@ -53,7 +53,17 @@ export async function aliasRevenueCat(newUserId: string): Promise<void> {
       console.log(`Attempting UUID Swap: ${currentId} -> ${newUserId}`);
       // identifyUser creates an alias if the current user is anonymous
       await purchases.identifyUser(newUserId);
-      console.log(`UUID Swap successful, the user is now: ${newUserId} instead of their original user id ${currentId}`);
+      
+      // Verify the swap
+      const updatedId = purchases.getAppUserId();
+      const updatedIsAnonymous = purchases.isAnonymous();
+      
+      if (updatedId === newUserId) {
+        console.log(`UUID Swap verified! New App User ID: ${updatedId} (IsAnonymous: ${updatedIsAnonymous})`);
+      } else {
+        console.warn(`UUID Swap verification failed! Expected: ${newUserId}, but RevenueCat still says: ${updatedId}`);
+      }
+
       // Cleanup anon ID from storage after successful merge
       localStorage.removeItem(ANON_ID_KEY);
     } catch (e) {
