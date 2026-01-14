@@ -28,7 +28,12 @@ const steps: FlowStep[] = [
   },
 ];
 
-export function GuiderGoal() {
+interface GuiderGoalProps {
+  onSelectBody?: (bodyFat: string) => void;
+}
+
+export function GuiderGoal({ onSelectBody }: GuiderGoalProps) {
+  void onSelectBody;
   return (
     <div className="flex flex-col items-start w-full max-w-md mx-auto px-6">
       <h1 className="text-2xl font-bold text-black mb-8">Lets move onto goals.</h1>

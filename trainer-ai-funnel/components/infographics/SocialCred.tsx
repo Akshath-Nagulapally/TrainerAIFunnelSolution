@@ -5,6 +5,7 @@ import { Star } from 'lucide-react';
 
 interface SocialCredProps {
   onLoadingComplete?: () => void;
+  onSelectBody?: (bodyFat: string) => void;
 }
 
 const reviews = [
@@ -34,7 +35,9 @@ const reviews = [
   },
 ];
 
-export function SocialCred({ onLoadingComplete }: SocialCredProps) {
+export function SocialCred({ onLoadingComplete, onSelectBody }: SocialCredProps) {
+  void onSelectBody;
+
   const [progress, setProgress] = useState(0);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
