@@ -97,7 +97,7 @@ export function NinetySixPercent({ onSelectBody }: NinetySixPercentProps) {
     <div className="flex flex-col h-full overflow-hidden">
       <h1 className="text-[22px] font-semibold text-black mb-4 flex-shrink-0">
         <span className="text-red-500">*</span>
-        {isSpanish ? '96% de los intentos fracasan sin apoyo estructurado.' : '96% of attempts fail without structured support.'}
+        {isSpanish ? '96% de los intentos fracasan sin apoyo estructurado.' : '96% of people quit excersize in days.'}
       </h1>
       
       <div className="flex-1 overflow-y-auto flex flex-col justify-center items-center px-4 py-6">
