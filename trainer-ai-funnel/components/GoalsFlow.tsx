@@ -6,7 +6,7 @@ interface FlowStep {
   number: number;
   title: string;
   description: string;
-  current?: boolean;
+  completed?: boolean;
 }
 
 const steps: FlowStep[] = [
@@ -14,12 +14,12 @@ const steps: FlowStep[] = [
     number: 1,
     title: 'Basics',
     description: 'A bit about yourself.',
+    completed: true,
   },
   {
     number: 2,
     title: 'Goal',
     description: 'What are you here for?',
-    current: true,
   },
   {
     number: 3,
@@ -28,10 +28,9 @@ const steps: FlowStep[] = [
   },
 ];
 
-export function GuiderGoal() {
+export function GoalsFlow() {
   return (
     <div className="flex flex-col items-start w-full max-w-md mx-auto px-6">
-      <h1 className="text-2xl font-bold text-black mb-8">Lets move onto goals.</h1>
       {steps.map((step, index) => (
         <React.Fragment key={step.number}>
           {/* Step Row */}
@@ -42,13 +41,21 @@ export function GuiderGoal() {
                 className={`
                   w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0
                   ${
-                    step.current
+                    step.completed
+                      ? 'bg-black text-white border-4 border-black'
+                      : step.number === 2
                       ? 'bg-red-500 text-white border-4 border-red-600 shadow-lg'
                       : 'bg-black text-white border-4 border-black'
                   }
                 `}
               >
-                {step.number}
+                {step.completed ? (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  step.number
+                )}
               </div>
             </div>
 

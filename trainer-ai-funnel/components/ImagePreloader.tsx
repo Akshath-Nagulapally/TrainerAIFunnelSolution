@@ -13,7 +13,6 @@ const imageMap: Record<string, string> = {
   'demo_1.png': 'images/intro_1_mhcsew',
   'iphone-frame.svg': 'images/iphone-frame_pgwbn2',
   'basics_start.png': 'images/basics_start_fgpng9',
-  'guider_goal.png': 'images/guider_goal_jupjun',
   'notification_bell.png': 'images/notification_bell_wg9zrj',
   'ninetysixpercent_reasons_image.png': 'images/ninetysixpercent_reasons_image_n1qecy',
   'onappstore.png': 'images/onappstore_wme6qd',
@@ -30,7 +29,6 @@ const imageMap: Record<string, string> = {
   'thirtytothirtyfour_man.png': 'images/thirtytothirtyfour_man_hcnwhn',
   'thirtyfivetothirtynine_man.png': 'images/thirtyfivetothirtynine_man_kw9zsc',
   'fortyplus_man.png': 'images/fortyplus_man_q4n54l',
-  'personalized.png': 'personalized_rt8v5f',
 };
 
 // Helper to build Cloudinary URL for preloading
@@ -49,10 +47,7 @@ const allImages = [
   'demo_1.png',
   'demo_2.png',
   'iphone-frame.svg',
-  'lets_personalize.png',
   'basics_start.png',
-  'guider_goal.png',
-  'personalized.png',
   'notification_bell.png',
   // Body composition images
   'threetofour_man.png',

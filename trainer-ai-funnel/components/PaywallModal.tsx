@@ -2,6 +2,8 @@
 
 import { useOnboarding } from '@/context/OnboardingContext';
 import { t } from '@/lib/i18n';
+import { useState } from 'react';
+import { LoadingImage } from '@/components/ui/LoadingImage';
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -9,8 +11,16 @@ interface PaywallModalProps {
   onStartTrial: () => void;
 }
 
+const MONTHLY_PRICE = 9.99;
+const YEARLY_PRICE = 29.99;
+
 export function PaywallModal({ isOpen, onClose, onStartTrial }: PaywallModalProps) {
   const { state } = useOnboarding();
+  const [selectedPlan, setSelectedPlan] = useState('yearly');
+
+  const monthlyDaily = (MONTHLY_PRICE / 30).toFixed(2);
+  const yearlyDaily = (YEARLY_PRICE / 365).toFixed(2);
+  const yearlyOriginalPrice = (YEARLY_PRICE * 12).toFixed(2);
 
   if (!isOpen) return null;
 
@@ -35,66 +45,106 @@ export function PaywallModal({ isOpen, onClose, onStartTrial }: PaywallModalProp
         </button>
         
         {/* Content */}
-        <div className="text-center">
-          {/* Icon */}
-          <div className="w-20 h-20 mx-auto mb-6 bg-[#D4FFF4] rounded-full flex items-center justify-center">
-            <span className="text-4xl">🔓</span>
+        <div className="space-y-4">
+          {/* Image */}
+          <div className="relative w-full h-[200px] mb-4">
+            <LoadingImage 
+              src="images/demo_2.png" 
+              alt="Trainer AI" 
+              fill 
+              className="object-contain"
+              priority
+            />
           </div>
-          
-          {/* Title */}
-          <h2 className="text-2xl font-semibold text-black mb-2">
-            {t('paywallTitle', state.language)}
-          </h2>
-          
-          {/* Description */}
-          <p className="text-[#A5A4A4] mb-8">
-            {t('paywallDescription', state.language)}
-          </p>
-          
-          {/* Features */}
-          <div className="space-y-3 mb-8 text-left">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-[#D4FFF4] flex items-center justify-center">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M10 3L4.5 8.5L2 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <span className="font-semibold">Daily AI motivation calls</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-[#D4FFF4] flex items-center justify-center">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M10 3L4.5 8.5L2 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <span className="font-semibold">Personalized workout schedule</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-[#D4FFF4] flex items-center justify-center">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M10 3L4.5 8.5L2 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <span className="font-semibold">Cancel anytime</span>
-            </div>
-          </div>
-          
-          {/* Start Trial Button */}
+
+          {/* Monthly Plan */}
           <button
-            onClick={onStartTrial}
-            className="w-full h-[56px] rounded-[28px] bg-black text-white font-semibold text-lg hover:bg-gray-800 transition-colors mb-4"
+            onClick={() => setSelectedPlan('monthly')}
+            className={`w-full rounded-2xl border p-5 transition-all duration-300 transform ${
+              selectedPlan === 'monthly'
+                ? 'border-black scale-100 bg-white'
+                : 'border-gray-200 scale-95 opacity-60 hover:scale-97 bg-gray-50'
+            }`}
           >
-            {t('startFreeTrial', state.language)}
+            <div className="flex items-center justify-between">
+              <div className="text-left">
+                <p className="text-gray-600 text-sm mb-1">Monthly</p>
+                <p className="text-3xl font-bold text-black">${MONTHLY_PRICE.toFixed(2)}</p>
+              </div>
+              <div className="text-right bg-orange-50 px-4 py-2 rounded-lg">
+                <p className="text-2xl font-bold text-black">${monthlyDaily}</p>
+                <p className="text-xs text-gray-600">per day</p>
+              </div>
+            </div>
           </button>
-          
-          {/* Maybe Later */}
+
+          {/* Yearly Plan */}
           <button
-            onClick={onClose}
-            className="text-[#A5A4A4] font-semibold hover:text-gray-600 transition-colors"
+            onClick={() => setSelectedPlan('yearly')}
+            className={`relative transition-all duration-300 transform ${
+              selectedPlan === 'yearly'
+                ? 'scale-100'
+                : 'scale-95'
+            }`}
           >
-            {t('maybeLater', state.language)}
+            {/* Top badges */}
+            {selectedPlan === 'yearly' && (
+              <div className="absolute -top-4 left-0 right-0 flex justify-between px-4 pointer-events-none">
+                <div className="bg-black rounded-full px-4 py-2 text-white text-xs font-bold animate-in fade-in duration-300">
+                  3 DAYS FREE
+                </div>
+                <div className="bg-black rounded-full px-4 py-2 text-white text-xs font-bold animate-in fade-in duration-300">
+                  SAVE 75%
+                </div>
+              </div>
+            )}
+
+            {/* Main card */}
+            <div className={`border-4 rounded-3xl p-6 bg-white transition-all duration-300 ${
+              selectedPlan === 'yearly'
+                ? 'border-black'
+                : 'border-gray-200'
+            }`}>
+              <div className="flex items-center justify-between">
+                <div className="text-left">
+                  <p className="text-gray-600 text-sm mb-1">
+                    <span className="font-bold text-black">Yearly</span> - 3 day free trial
+                  </p>
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-sm text-gray-400 line-through">${yearlyOriginalPrice}</span>
+                    <p className="text-3xl font-bold text-black">${YEARLY_PRICE.toFixed(2)}</p>
+                  </div>
+                </div>
+                <div className="text-right bg-orange-50 px-4 py-2 rounded-lg">
+                  <p className="text-2xl font-bold text-black">${yearlyDaily}</p>
+                  <p className="text-xs text-gray-600">per day</p>
+                </div>
+              </div>
+            </div>
           </button>
         </div>
+
+        {/* Auto-charge notice */}
+        <p className="text-center text-sm text-gray-500 my-6">
+          Trainer AI will auto-charge <span className="font-semibold">${YEARLY_PRICE.toFixed(2)}/year</span><br />
+          unless you cancel on trainer-ai.app
+        </p>
+        
+        {/* Start Trial Button */}
+        <button
+          onClick={onStartTrial}
+          className="w-full h-[56px] rounded-[28px] bg-black text-white font-bold text-lg hover:bg-gray-900 transition-colors mb-3"
+        >
+          Start Free Trial
+        </button>
+        
+        {/* Maybe Later */}
+        <button
+          onClick={onClose}
+          className="w-full text-gray-500 font-semibold hover:text-gray-600 transition-colors py-2"
+        >
+          Maybe Later
+        </button>
       </div>
     </div>
   );

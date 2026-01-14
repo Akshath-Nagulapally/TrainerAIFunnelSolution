@@ -36,7 +36,7 @@ export interface InfoScreenData {
     en: string;
     es: string;
   };
-  image: string;
+  image?: string;
   buttonText: {
     en: string;
     es: string;

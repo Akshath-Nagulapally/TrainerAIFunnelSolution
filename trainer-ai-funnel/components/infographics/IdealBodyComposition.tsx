@@ -45,7 +45,7 @@ export function IdealBodyComposition({ onSelectBody }: IdealBodyCompositionProps
       
       {/* 3x3 Grid */}
       <div className="flex-1 flex items-center justify-center min-h-0">
-        <div className="grid grid-cols-3 gap-x-2 gap-y-0">
+        <div className="grid grid-cols-3 gap-x-3 gap-y-2">
           {bodyTypes.map((type) => (
             <button
               key={type.id}
@@ -54,7 +54,7 @@ export function IdealBodyComposition({ onSelectBody }: IdealBodyCompositionProps
             >
               {/* Image box */}
               <div className={`
-                relative w-[60px] h-[60px] rounded-lg border-[2px] overflow-hidden bg-gray-50
+                relative w-[90px] h-[90px] rounded-lg border-[2px] overflow-hidden bg-gray-50
                 ${selected === type.id ? 'border-black' : 'border-black'}
               `}>
                 {/* Loading spinner */}
@@ -66,15 +66,15 @@ export function IdealBodyComposition({ onSelectBody }: IdealBodyCompositionProps
                 <Image
                   src={type.image}
                   alt={type.label}
-                  width={60}
-                  height={60}
+                  width={90}
+                  height={90}
                   className={`w-full h-full object-cover transition-opacity duration-200 ${loadedImages.has(type.id) ? 'opacity-100' : 'opacity-0'}`}
                   onLoad={() => handleImageLoad(type.id)}
                 />
               </div>
               {/* Label tab */}
               <div className={`
-                -mt-0.5 px-1 py-0.5 rounded border-[2px] border-black text-[8px] font-semibold
+                -mt-0.5 px-2 py-1 rounded border-[2px] border-black text-[11px] font-semibold
                 ${selected === type.id ? 'bg-black text-white' : 'bg-white text-black'}
               `}>
                 {type.label}

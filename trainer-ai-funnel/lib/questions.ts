@@ -34,7 +34,6 @@ export const infoScreens: Record<string, InfoScreenData> = {
   personalize: {
     id: 'personalize',
     title: { en: "Let's personalize your AI Agent", es: 'Personalicemos tu Agente AI' },
-    image: 'lets_personalize.png',
     buttonText: { en: 'Get Started', es: 'Comenzar' },
   },
   basicsStart: {
@@ -46,7 +45,6 @@ export const infoScreens: Record<string, InfoScreenData> = {
   guiderGoal: {
     id: 'guiderGoal',
     title: { en: "Let's move on to goals.", es: 'Pasemos a las metas.' },
-    image: 'guider_goal.png',
     buttonText: { en: 'Continue', es: 'Continuar' },
   },
   demo: {
@@ -56,7 +54,11 @@ export const infoScreens: Record<string, InfoScreenData> = {
       en: 'Based on your response, this is the AI personality profile that best suits your needs. Personalization Complete!', 
       es: 'Según tus respuestas, este es el perfil de IA que mejor se adapta a tus necesidades. ¡Personalización completa!' 
     },
-    image: 'personalized.png',
+    buttonText: { en: 'Continue', es: 'Continuar' },
+  },
+  socialCred: {
+    id: 'socialCred',
+    title: { en: 'We are setting up your AI agent for you!', es: 'Personalizando tu agente de IA' },
     buttonText: { en: 'Continue', es: 'Continuar' },
   },
   payment: {
@@ -75,6 +77,11 @@ export const infoScreens: Record<string, InfoScreenData> = {
 
 // Survey questions
 export const surveyQuestions: QuestionConfig[] = [
+  {
+    id: 'personalize',
+    type: 'infographic',
+    component: 'PersonalizeAgent',
+  },
   // Goals section
   {
     id: 'guiderGoal',
@@ -198,6 +205,16 @@ export const surveyQuestions: QuestionConfig[] = [
     id: 'favouriteExcuse',
     type: 'infographic',
     component: 'FavouriteExcuse',
+  },
+  {
+    id: 'socialCred',
+    type: 'infographic',
+    component: 'SocialCred',
+  },
+  {
+    id: 'demo',
+    type: 'infographic',
+    component: 'PersonalizeAgent',
   },
 ];
 

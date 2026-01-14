@@ -9,7 +9,7 @@ export const screens: ScreenConfig[] = [
   { id: 'tutorial2', type: 'info', template: 'InfoScreen' },
   
   // Basics (4 screens)
-  { id: 'personalize', type: 'info', template: 'InfoScreen' },
+  { id: 'personalize', type: 'infographic', template: 'InfographicScreen' },
   { id: 'basicsStart', type: 'info', template: 'InfoScreen' },
   ...basicQuestions.map(q => ({
     id: q.id,
@@ -28,7 +28,6 @@ export const screens: ScreenConfig[] = [
   })),
   
   // Payment (3 screens)
-  { id: 'demo', type: 'info', template: 'InfoScreen' },
   { id: 'payment', type: 'info', template: 'InfoScreen' },
   { id: 'notification', type: 'info', template: 'InfoScreen' },
 ];

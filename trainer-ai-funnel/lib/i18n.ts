@@ -17,6 +17,7 @@ export const translations = {
 
   // Personalization
   personalizeTitle: { en: "Let's personalize your AI Agent", es: 'Personalicemos tu Agente AI' },
+  demoTitle: { en: 'Your Match: Agent #5', es: 'Tu Match: Agente #5' },
   basicsStartTitle: { en: "Let's start with the basics.", es: 'Comencemos con lo básico.' },
 
   // Gender

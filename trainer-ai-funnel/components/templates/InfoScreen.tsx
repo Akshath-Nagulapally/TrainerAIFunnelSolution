@@ -13,7 +13,7 @@ import { useState, useRef, useEffect } from 'react';
 interface InfoScreenProps {
   title: string | string[];
   subtitle?: string;
-  image: string;
+  image?: string;
   buttonText: string;
   onContinue: () => void;
   onBack?: () => void;
@@ -23,6 +23,7 @@ interface InfoScreenProps {
   showProgressBar?: boolean;
   showBackButton?: boolean;
   extraContent?: React.ReactNode;
+  customContent?: React.ReactNode;
   checkmark?: boolean;
   priceInfo?: string;
   tryItAudio?: string;
@@ -44,6 +45,7 @@ export function InfoScreen({
   showProgressBar = false,
   showBackButton = false,
   extraContent,
+  customContent,
   checkmark = false,
   priceInfo,
   tryItAudio,
@@ -201,53 +203,59 @@ export function InfoScreen({
               </p>
             )}
 
-            {/* Image */}
-            <div className="flex-1 flex items-center justify-center w-full min-h-0">
-              <div className="relative w-full h-full max-w-[280px]">
-                <LoadingImage
-                  src={image}
-                  alt="Demo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-                {/* Try It Button - positioned in center of phone frame */}
-                {tryItAudio && tryItButtonText && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <button
-                      onClick={handleTryIt}
-                      className={`
-                        flex items-center justify-center gap-2
-                        px-8 py-4 rounded-full
-                        font-semibold text-lg
-                        transition-all duration-300 ease-out
-                        transform hover:scale-105 active:scale-95
-                        bg-white border-2 border-black text-black
-                        hover:bg-gray-50
-                      `}
-                      style={{ fontFamily: 'var(--font-onest), sans-serif', fontWeight: 600 }}
-                    >
-                      {isPlaying ? (
-                        <>
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <rect x="6" y="4" width="4" height="16" rx="1" />
-                            <rect x="14" y="4" width="4" height="16" rx="1" />
-                          </svg>
-                          <span>Stop</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                          <span>{tryItButtonText}</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
+            {/* Image or Custom Content */}
+            {image ? (
+              <div className="flex-1 flex items-center justify-center w-full min-h-0">
+                <div className="relative w-full h-full max-w-[280px]">
+                  <LoadingImage
+                    src={image}
+                    alt="Demo"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                  {/* Try It Button - positioned in center of phone frame */}
+                  {tryItAudio && tryItButtonText && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <button
+                        onClick={handleTryIt}
+                        className={`
+                          flex items-center justify-center gap-2
+                          px-8 py-4 rounded-full
+                          font-semibold text-lg
+                          transition-all duration-300 ease-out
+                          transform hover:scale-105 active:scale-95
+                          bg-white border-2 border-black text-black
+                          hover:bg-gray-50
+                        `}
+                        style={{ fontFamily: 'var(--font-onest), sans-serif', fontWeight: 600 }}
+                      >
+                        {isPlaying ? (
+                          <>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                              <rect x="6" y="4" width="4" height="16" rx="1" />
+                              <rect x="14" y="4" width="4" height="16" rx="1" />
+                            </svg>
+                            <span>Stop</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                            <span>{tryItButtonText}</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            ) : customContent ? (
+              <div className="flex-1 flex items-center justify-center w-full min-h-0">
+                {customContent}
+              </div>
+            ) : null}
 
             {/* Extra content (checkmark, etc.) */}
             {extraContent}

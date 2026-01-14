@@ -9,9 +9,12 @@ import { InfographicScreen } from '@/components/templates/InfographicScreen';
 import { DummyAuth } from '@/components/screens/DummyAuth';
 import { PaywallModal } from '@/components/PaywallModal';
 import { SlideTransition } from '@/components/ui/SlideTransition';
+import { BasicsFlow } from '@/components/BasicsFlow';
+import { GoalsFlow } from '@/components/GoalsFlow';
 
 // Infographics
 import { GuiderGoal } from '@/components/infographics/GuiderGoal';
+import { PersonalizeAgent } from '@/components/infographics/PersonalizeAgent';
 import { CurrentBodyComposition } from '@/components/infographics/CurrentBodyComposition';
 import { IdealBodyComposition } from '@/components/infographics/IdealBodyComposition';
 import { NotHardAtAll } from '@/components/infographics/NotHardAtAll';
@@ -19,6 +22,7 @@ import { LongTermConsistency } from '@/components/infographics/LongTermConsisten
 import { NinetySixPercent } from '@/components/infographics/NinetySixPercent';
 import { FavouriteExcuse } from '@/components/infographics/FavouriteExcuse';
 import { GoalChart } from '@/components/infographics/GoalChart';
+import { SocialCred } from '@/components/infographics/SocialCred';
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -27,6 +31,7 @@ import { t } from '@/lib/i18n';
 // Map of infographic components
 const infographicComponents: Record<string, React.ComponentType<{ onSelectBody?: (bodyFat: string) => void }>> = {
   GuiderGoal,
+  PersonalizeAgent,
   CurrentBodyComposition,
   IdealBodyComposition,
   NotHardAtAll,
@@ -34,6 +39,7 @@ const infographicComponents: Record<string, React.ComponentType<{ onSelectBody?:
   NinetySixPercent,
   FavouriteExcuse,
   GoalChart,
+  SocialCred,
 };
 
 function ResetHandler() {
@@ -57,6 +63,7 @@ function ResetHandler() {
 export default function OnboardingPage() {
   const { state, nextStep, prevStep, setAnswer } = useOnboarding();
   const [showPaywall, setShowPaywall] = useState(false);
+  const [socialCredLoading, setSocialCredLoading] = useState(true);
   const router = useRouter();
   
   const currentScreen = screens[state.currentStep];
@@ -127,11 +134,20 @@ export default function OnboardingPage() {
           ? screenData.title[state.language] as string[]
           : screenData.title[state.language] as string;
         
+        // Custom content for specific screens
+        let customContent: React.ReactNode = undefined;
+        if (currentScreen.id === 'basicsStart') {
+          customContent = <BasicsFlow />;
+        } else if (currentScreen.id === 'guiderGoal') {
+          customContent = <GoalsFlow />;
+        }
+        
         return (
           <InfoScreen
             title={title}
             subtitle={screenData.subtitle?.[state.language]}
-            image={screenData.image}
+            image={currentScreen.id === 'basicsStart' || currentScreen.id === 'guiderGoal' ? undefined : screenData.image}
+            customContent={customContent}
             buttonText={screenData.buttonText[state.language]}
             onContinue={handleContinue}
             onBack={state.currentStep > 0 ? prevStep : undefined}
@@ -202,12 +218,36 @@ export default function OnboardingPage() {
           );
         }
 
+        const infoScreenData = infoScreens[currentScreen.id];
+        
+        // Prepare props for PersonalizeAgent
+        const componentProps: any = {};
+        if (infographicConfig?.component === 'PersonalizeAgent') {
+          componentProps.isRevealed = currentScreen.id === 'demo';
+        }
+
+        // Track loading state for SocialCred component
+        if (infographicConfig?.component === 'SocialCred') {
+          componentProps.onLoadingComplete = () => setSocialCredLoading(false);
+        }
+
+        // Check if this is a body composition selection screen that needs validation
+        const isBodyCompositionScreen = ['currentBody', 'idealBody'].includes(currentScreen.id);
+        const hasSelectedBody = state.answers[currentScreen.id];
+        const isDisabled = isBodyCompositionScreen && !hasSelectedBody;
+
+        // Disable button for SocialCred until loading is complete
+        const isSocialCredDisabled = currentScreen.id === 'socialCred' && socialCredLoading;
+
         return (
           <InfographicScreen
             onContinue={handleContinue}
             onBack={prevStep}
+            buttonText={infoScreenData?.buttonText[state.language] || t('continueLabel', state.language)}
+            disabled={isDisabled || isSocialCredDisabled}
           >
             <ComponentToRender 
+              {...componentProps}
               onSelectBody={(bodyFat) => setAnswer(currentScreen.id, bodyFat)}
             />
           </InfographicScreen>

@@ -14,12 +14,12 @@ const steps: FlowStep[] = [
     number: 1,
     title: 'Basics',
     description: 'A bit about yourself.',
+    current: true,
   },
   {
     number: 2,
     title: 'Goal',
     description: 'What are you here for?',
-    current: true,
   },
   {
     number: 3,
@@ -28,10 +28,9 @@ const steps: FlowStep[] = [
   },
 ];
 
-export function GuiderGoal() {
+export function BasicsFlow() {
   return (
     <div className="flex flex-col items-start w-full max-w-md mx-auto px-6">
-      <h1 className="text-2xl font-bold text-black mb-8">Lets move onto goals.</h1>
       {steps.map((step, index) => (
         <React.Fragment key={step.number}>
           {/* Step Row */}

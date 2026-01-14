@@ -9,7 +9,6 @@ const imageMap: Record<string, string> = {
   'demo_1.png': 'images/intro_1_mhcsew',
   'iphone-frame.svg': 'images/iphone-frame_pgwbn2',
   'basics_start.png': 'images/basics_start_fgpng9',
-  'guider_goal.png': 'images/guider_goal_jupjun',
   'notification_bell.png': 'images/notification_bell_wg9zrj',
   'ninetysixpercent_reasons_image.png': 'images/ninetysixpercent_reasons_image_n1qecy',
   'onappstore.png': 'images/onappstore_wme6qd',
@@ -27,11 +26,8 @@ const imageMap: Record<string, string> = {
   'thirtyfivetothirtynine_man.png': 'images/thirtyfivetothirtynine_man_kw9zsc',
   'fortyplus_man.png': 'images/fortyplus_man_q4n54l',
   
-  'personalized.png': 'personalized_rt8v5f',
-  
   // Served locally (too large for Cloudinary free tier):
   // 'demo_2.png'
-  // 'lets_personalize.png'
 };
 
 export default function cloudinaryLoader({
