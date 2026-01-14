@@ -40,6 +40,7 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
   const handleContinue = async () => {
     // Ensure RevenueCat is aliased/configured with the user's ID
     if (userId) {
+      configureRevenueCat();
       await aliasRevenueCat(userId);
       // After auth is complete, redirect to download page
       router.push('/download');
