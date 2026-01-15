@@ -26,12 +26,12 @@ export const screens: ScreenConfig[] = [
       template: q.type === 'question' ? 'QuestionScreen' : 'InfographicScreen',
     })),
   
+  // Auth (1 screen) - Moved to before paywall
+  { id: 'auth', type: 'custom', template: 'DummyAuth' },
+
   // Payment (3 screens)
   { id: 'payment', type: 'info', template: 'InfoScreen' },
   { id: 'notification', type: 'info', template: 'InfoScreen' },
-
-  // Auth (1 screen) - Moved to after paywall
-  { id: 'auth', type: 'custom', template: 'DummyAuth' },
 ];
 
 export const totalScreens = screens.length;

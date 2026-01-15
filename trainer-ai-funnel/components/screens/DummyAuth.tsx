@@ -6,7 +6,7 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { t } from '@/lib/i18n';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { configureRevenueCat, aliasRevenueCat } from '@/lib/revenuecat';
+import { configureRevenueCat } from '@/lib/revenuecat';
 import { useRouter } from 'next/navigation';
 
 interface DummyAuthProps {
@@ -29,8 +29,8 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
       if (user) {
         setIsSignedIn(true);
         setUserId(user.id);
-        // If they are already signed in, we should alias if needed
-        await aliasRevenueCat(user.id);
+        // If they are already signed in, we should configure with their ID
+        configureRevenueCat(user.id);
       }
       setIsCheckingAuth(false);
     };
@@ -38,12 +38,22 @@ export function DummyAuth({ onContinue }: DummyAuthProps) {
   }, []);
 
   const handleContinue = async () => {
-    // Ensure RevenueCat is aliased/configured with the user's ID
+    // Ensure RevenueCat is configured with the user's ID
     if (userId) {
-      configureRevenueCat();
-      await aliasRevenueCat(userId);
+      configureRevenueCat(userId);
       // After auth is complete, redirect to download page
-      router.push('/download');
+      // But wait, the user flow is Auth -> Paywall -> Download
+      // The instruction was: "We first authenticate (right before the paywall)"
+      // So here we should probably proceed to the next step (Paywall), not Download.
+      // However, the original code had: router.push('/download');
+      // If we are BEFORE paywall, we should just call onContinue() which moves to the next screen (Payment/Paywall info)
+      // or if this is the last screen before paywall...
+      // Let's check the screens flow again.
+      // screens.ts: auth -> payment (InfoScreen) -> notification (InfoScreen) -> ... paywall page?
+      // Wait, 'payment' screen is just an InfoScreen.
+      // If DummyAuth is used in 'auth' step, onContinue() will go to 'payment' step.
+      // So we should just call onContinue().
+      onContinue();
     } else {
       onContinue();
     }

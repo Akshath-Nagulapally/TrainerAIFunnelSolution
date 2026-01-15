@@ -99,11 +99,6 @@ export default function OnboardingPage() {
   }
 
   const handleContinue = () => {
-    // Configure RevenueCat at the very first interaction (tutorial stage)
-    if (state.currentStep === 0) {
-      configureRevenueCat();
-    }
-
     // Check if we're on the notification screen (last screen before paywall)
     if (currentScreen.id === 'notification') {
       router.push('/paywall');

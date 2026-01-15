@@ -25,12 +25,20 @@ export default function PaywallPage() {
   useEffect(() => {
     const initAndFetch = async () => {
       try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+          // If not authenticated, redirect to onboarding start (or auth step if we could target it)
+          console.log('User not authenticated on paywall. Redirecting to onboarding.');
+          router.push('/onboarding');
+          return;
+        }
+
         let purchases = getPurchases();
         
-        if (!purchases) {
-          // No user session required anymore for initial configuration
-          purchases = configureRevenueCat();
-        }
+        // Always configure with the authenticated user ID
+        purchases = configureRevenueCat(user.id);
 
         const offerings = await Purchases.getSharedInstance().getOfferings();
         const targetOfferingId = "TrainerAI_WEB_SANDBOX";
@@ -82,8 +90,8 @@ export default function PaywallPage() {
       }
 
       const { customerInfo } = await purchases.purchasePackage(selectedPackage);
-      console.log('Purchase successful! Redirecting to account creation...');
-      router.push('/onboarding?step=auth');
+      console.log('Purchase successful! Redirecting to download...');
+      router.push('/download');
     } catch (e: any) {
       if (!e.userCancelled) {
         if (e.message?.includes('This product is already active for the user')) {
