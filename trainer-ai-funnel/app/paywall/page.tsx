@@ -90,7 +90,28 @@ export default function PaywallPage() {
       }
 
       const { customerInfo } = await purchases.purchasePackage(selectedPackage);
-      console.log('Purchase successful! Redirecting to download...');
+      console.log('Purchase successful! Updating user profile and redirecting to download...');
+      
+      // Update user profile to set is_onboarded = true
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ is_onboarded: true })
+          .eq('id', user.id);
+
+        if (updateError) {
+          console.error('Error updating user onboarding status:', updateError);
+          // We continue to redirect even if profile update fails, as the purchase was successful
+        } else {
+          console.log('User onboarding status updated successfully.');
+        }
+      } else {
+        console.error('No authenticated user found during purchase processing');
+      }
+
       router.push('/download');
     } catch (e: any) {
       if (!e.userCancelled) {
