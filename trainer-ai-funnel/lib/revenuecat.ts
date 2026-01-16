@@ -3,9 +3,15 @@ import { Purchases } from '@revenuecat/purchases-js';
 // Your RevenueCat Web Billing Public API Key
 // TODO: Replace with your actual API key from RevenueCat dashboard
 // Web Billing Public API Key from RevenueCat Dashboard (starts with rcb_)
-const IS_SANDBOX = process.env.NODE_ENV === 'development' || true; // Force sandbox for now as requested
+
+//Mode can be two states : LIVE OR SANDBOX
+const MODE = process.env.NEXT_PUBLIC_MODE || process.env.MODE;
+const IS_SANDBOX = MODE ? MODE === 'SANDBOX' : process.env.NODE_ENV === 'development';
+
+console.log('RevenueCat Environment:', { MODE, IS_SANDBOX, NODE_ENV: process.env.NODE_ENV });
+
 const WEB_BILLING_PUBLIC_API_KEY = IS_SANDBOX 
-  ? process.env.NEXT_PUBLIC_REVENUECAT_API_KEY_SANDBOX || process.env.NEXT_PUBLIC_REVENUECAT_API_KEY || ''
+  ? process.env.NEXT_PUBLIC_REVENUECAT_API_KEY_SANDBOX || ''
   : process.env.NEXT_PUBLIC_REVENUECAT_API_KEY || '';
 
 let purchasesInstance: Purchases | null = null;

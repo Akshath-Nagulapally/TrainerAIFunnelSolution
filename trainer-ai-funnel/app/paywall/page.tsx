@@ -41,8 +41,10 @@ export default function PaywallPage() {
         purchases = configureRevenueCat(user.id);
 
         const offerings = await Purchases.getSharedInstance().getOfferings();
-        const targetOfferingId = "TrainerAI_WEB_SANDBOX";
-        const targetOffering = offerings.all[targetOfferingId];
+        
+        // In Live mode, we should look for "TrainerAI_Web_Offerrings" or the current offering if specific ID isn't found
+        const targetOfferingId = process.env.NEXT_PUBLIC_MODE === 'SANDBOX' ? "TrainerAI_WEB_SANDBOX" : "TrainerAI_Web_Offerrings";
+        const targetOffering = offerings.all[targetOfferingId] || offerings.current;
         
         let availablePackages: Package[] = [];
         if (targetOffering && targetOffering.availablePackages.length > 0) {
@@ -50,6 +52,14 @@ export default function PaywallPage() {
         } else if (offerings.current && offerings.current.availablePackages.length > 0) {
           availablePackages = offerings.current.availablePackages;
         }
+
+        console.log('RevenueCat Offerings:', {
+          mode: process.env.NEXT_PUBLIC_MODE,
+          targetId: targetOfferingId,
+          foundTarget: !!offerings.all[targetOfferingId],
+          current: !!offerings.current,
+          packages: availablePackages.length
+        });
 
         if (availablePackages.length > 0) {
           // Sort packages: Monthly first, then Annual/Yearly
@@ -66,6 +76,7 @@ export default function PaywallPage() {
           const annual = sorted.find(p => p.packageType.toString().toLowerCase().includes('annual') || p.identifier.toLowerCase().includes('annual'));
           setSelectedPackage(annual || sorted[sorted.length - 1]);
         } else {
+          console.warn('No packages found in offerings');
           setError('No subscription plans available at the moment.');
         }
       } catch (e) {
@@ -79,8 +90,31 @@ export default function PaywallPage() {
     initAndFetch();
   }, [router]);
 
+  // Handle initialization/fetch errors or empty packages
+  if (error || (!loading && packages.length === 0)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6 text-center">
+        <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+        </div>
+        <h2 className="text-xl font-bold mb-2">Something went wrong</h2>
+        <p className="text-gray-500 mb-6">{error || 'No subscription plans available.'}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="px-6 py-2 bg-black text-white rounded-full font-bold"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
   const handlePurchase = async () => {
-    if (!selectedPackage || isPurchasing) return;
+    if (!selectedPackage || isPurchasing) {
+      return;
+    }
     
     setIsPurchasing(true);
     try {
@@ -185,6 +219,7 @@ export default function PaywallPage() {
             src="demo_2.png" 
             alt="Tutorial 2/2" 
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain"
             priority
           />

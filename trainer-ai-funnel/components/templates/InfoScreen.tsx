@@ -213,6 +213,7 @@ export function InfoScreen({
                     src={image}
                     alt="Demo"
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-contain"
                     priority={priority}
                   />
