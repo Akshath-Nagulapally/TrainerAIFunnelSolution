@@ -7,11 +7,8 @@ import { useOnboarding } from '@/context/OnboardingContext';
 import { getPurchases, configureRevenueCat } from '@/lib/revenuecat';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { t } from '@/lib/i18n';
-import { PrimaryButton } from '@/components/ui/PrimaryButton';
-import { BackButton } from '@/components/ui/BackButton';
 import { CountdownTimer } from '@/components/ui/CountdownTimer';
-import { LoadingImage } from '@/components/ui/LoadingImage';
+import { TrialTimeline } from '@/components/ui/TrialTimeline';
 
 export default function PaywallPage() {
   const { state } = useOnboarding();
@@ -195,103 +192,98 @@ export default function PaywallPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-white font-sans text-black overflow-hidden">
-      {/* Header with Logo */}
-      <div className="px-6 py-4 flex flex-col items-center overflow-y-auto flex-1 pb-32">
-        <div className="flex items-center gap-2 mb-4">
+    <div className="flex flex-col h-screen bg-white font-sans text-black overflow-hidden safe-area-view">
+      {/* Main Content Area - Flex layout to distribute space and avoid scroll if possible */}
+      <div className="flex-1 flex flex-col px-6 pt-4 pb-2 items-center min-h-0">
+        <div className="flex-shrink-0 flex items-center gap-2 mb-2">
           <span className="text-2xl font-bold tracking-tight">Trainer AI</span>
         </div>
         
-        {/* Promo Bar */}
-        <div className="w-full max-w-md bg-[#111111] rounded-sm py-2 px-4 flex justify-between items-center mb-8">
-          <span className="text-[#A5A4FF] font-bold">75% off!</span>
-          <CountdownTimer />
-        </div>
+        {/* Content Wrapper - Distribute vertical space */}
+        <div className="flex-1 flex flex-col w-full max-w-md items-center justify-between gap-2">
+          {/* Promo Bar */}
+          <div className="w-full bg-[#111111] rounded-sm py-2 px-4 flex justify-between items-center">
+            <span className="text-[#A5A4FF] font-bold">75% off!</span>
+            <CountdownTimer />
+          </div>
 
-        <h1 className="text-3xl font-bold text-center mb-8">
-          Your personal plan is ready!
-        </h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-center leading-tight">
+            Your personal plan is ready!
+          </h1>
 
-        {/* Tutorial 2/2 Image */}
-        {/* className="relative w-full h-[420px] mb-12 mx-auto">*/}
-        <div className="relative w-full h-full"> 
-          <LoadingImage 
-            src="demo_2.png" 
-            alt="Tutorial 2/2" 
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-contain"
-            priority
-          />
-        </div>
+          {/* Trial Timeline */}
+          <div className="w-full">
+            <TrialTimeline />
+          </div>
 
-        {/* Pricing Options */}
-        <div className="w-full max-w-md space-y-4 mb-4">
-          {packages.map((pkg) => {
-            const info = getPackageInfo(pkg);
-            const isSelected = selectedPackage?.identifier === pkg.identifier;
-            
-            return (
-              <div 
-                key={pkg.identifier}
-                onClick={() => setSelectedPackage(pkg)}
-                className={`relative cursor-pointer transition-all duration-200 ${
-                  isSelected 
-                    ? 'ring-2 ring-black rounded-3xl' 
-                    : 'border border-gray-200 rounded-3xl'
-                }`}
-              >
-                {info.isAnnual && (
-                  <>
-                    <div className="absolute -top-3 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full z-10">
-                      3 DAYS FREE
+          {/* Pricing Options */}
+          <div className="w-full space-y-3">
+            {packages.map((pkg) => {
+              const info = getPackageInfo(pkg);
+              const isSelected = selectedPackage?.identifier === pkg.identifier;
+              
+              return (
+                <div 
+                  key={pkg.identifier}
+                  onClick={() => setSelectedPackage(pkg)}
+                  className={`relative cursor-pointer transition-all duration-200 ${
+                    isSelected 
+                      ? 'ring-2 ring-black rounded-3xl' 
+                      : 'border border-gray-200 rounded-3xl'
+                  }`}
+                >
+                  {info.isAnnual && (
+                    <>
+                      <div className="absolute -top-3 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full z-10">
+                        3 DAYS FREE
+                      </div>
+                      <div className="absolute -top-3 right-6 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full z-10">
+                        SAVE 75%
+                      </div>
+                    </>
+                  )}
+                  
+                  <div className={`flex items-center justify-between p-4 rounded-3xl ${isSelected ? 'bg-white' : 'bg-white'}`}>
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-1">
+                        <span className="text-lg font-bold">{info.title}</span>
+                        <span className="text-gray-400 text-xs font-medium">{info.subtitle}</span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        {info.originalPrice && (
+                          <span className="text-gray-400 line-through font-medium text-sm">{info.originalPrice}</span>
+                        )}
+                        <span className="text-lg font-bold">{info.price}</span>
+                      </div>
                     </div>
-                    <div className="absolute -top-3 right-6 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full z-10">
-                      SAVE 75%
-                    </div>
-                  </>
-                )}
-                
-                <div className={`flex items-center justify-between p-5 rounded-3xl ${isSelected ? 'bg-white' : 'bg-white'}`}>
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1">
-                      <span className="text-xl font-bold">{info.title}</span>
-                      <span className="text-gray-400 text-sm font-medium">{info.subtitle}</span>
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      {info.originalPrice && (
-                        <span className="text-gray-400 line-through font-medium">{info.originalPrice}</span>
-                      )}
-                      <span className="text-xl font-bold">{info.price}</span>
-                    </div>
-                  </div>
 
-                  <div className="bg-[#FFF5F0] rounded-2xl px-4 py-2 flex flex-col items-center min-w-[100px]">
-                     <div className="flex items-baseline">
-                       <span className="text-3xl font-bold">${info.dailyPriceParts.whole}</span>
-                       <div className="flex flex-col ml-0.5">
-                         <span className="text-sm font-bold leading-none">{info.dailyPriceParts.decimal}</span>
-                         <span className="text-[10px] text-gray-500 font-medium">per day</span>
+                    <div className="bg-[#FFF5F0] rounded-2xl px-3 py-1.5 flex flex-col items-center min-w-[90px]">
+                       <div className="flex items-baseline">
+                         <span className="text-2xl font-bold">${info.dailyPriceParts.whole}</span>
+                         <div className="flex flex-col ml-0.5">
+                           <span className="text-xs font-bold leading-none">{info.dailyPriceParts.decimal}</span>
+                           <span className="text-[9px] text-gray-500 font-medium">per day</span>
+                         </div>
                        </div>
                      </div>
-                   </div>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        <p className="text-center text-[11px] text-gray-400 mb-8 max-w-xs">
-          Trainer AI will auto-charge {getPackageInfo(selectedPackage || packages[0]).price}/{selectedPackage?.packageType.toString().toLowerCase().includes('annual') ? 'year' : 'month'} unless you cancel on trainerai.app
-        </p>
+          <p className="text-center text-[10px] text-gray-400 max-w-xs">
+            Trainer AI will auto-charge {getPackageInfo(selectedPackage || packages[0]).price}/{selectedPackage?.packageType.toString().toLowerCase().includes('annual') ? 'year' : 'month'} unless you cancel on trainerai.app
+          </p>
+        </div>
       </div>
 
-      {/* Sticky Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-md border-t border-gray-100 flex justify-center z-50">
+      {/* Button Area - Static at bottom (not fixed overlay) */}
+      <div className="p-6 pt-2 bg-white flex-shrink-0 flex justify-center w-full">
         <button
           onClick={handlePurchase}
           disabled={isPurchasing}
-          className={`w-full max-w-md h-16 bg-black text-white rounded-full font-bold text-xl transition-transform active:scale-95 ${
+          className={`w-full max-w-md h-14 bg-black text-white rounded-full font-bold text-lg transition-transform active:scale-95 ${
             isPurchasing ? 'opacity-70 cursor-not-allowed' : ''
           }`}
         >

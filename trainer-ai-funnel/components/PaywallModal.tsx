@@ -1,9 +1,8 @@
 'use client';
 
 import { useOnboarding } from '@/context/OnboardingContext';
-import { t } from '@/lib/i18n';
 import { useState } from 'react';
-import { LoadingImage } from '@/components/ui/LoadingImage';
+import { TrialTimeline } from '@/components/ui/TrialTimeline';
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -46,15 +45,9 @@ export function PaywallModal({ isOpen, onClose, onStartTrial }: PaywallModalProp
         
         {/* Content */}
         <div className="space-y-4">
-          {/* Image */}
-          <div className="relative w-full h-[200px] mb-4">
-            <LoadingImage 
-              src="images/demo_2.png" 
-              alt="Trainer AI" 
-              fill 
-              className="object-contain"
-              priority
-            />
+          {/* Trial Timeline */}
+          <div className="w-full mb-4">
+            <TrialTimeline />
           </div>
 
           {/* Monthly Plan */}

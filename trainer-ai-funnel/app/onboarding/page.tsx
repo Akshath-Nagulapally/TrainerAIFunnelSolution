@@ -12,6 +12,7 @@ import { getPurchases, configureRevenueCat } from '@/lib/revenuecat';
 import { SlideTransition } from '@/components/ui/SlideTransition';
 import { BasicsFlow } from '@/components/BasicsFlow';
 import { GoalsFlow } from '@/components/GoalsFlow';
+import { TrialTimeline } from '@/components/ui/TrialTimeline';
 
 import { useState, useEffect, Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -153,13 +154,15 @@ export default function OnboardingPage() {
           customContent = <BasicsFlow />;
         } else if (currentScreen.id === 'guiderGoal') {
           customContent = <GoalsFlow />;
+        } else if (currentScreen.id === 'payment') {
+          customContent = <TrialTimeline />;
         }
         
         return (
           <InfoScreen
             title={title}
             subtitle={screenData.subtitle?.[state.language]}
-            image={currentScreen.id === 'basicsStart' || currentScreen.id === 'guiderGoal' ? undefined : screenData.image}
+            image={currentScreen.id === 'basicsStart' || currentScreen.id === 'guiderGoal' || currentScreen.id === 'payment' ? undefined : screenData.image}
             customContent={customContent}
             buttonText={screenData.buttonText[state.language]}
             onContinue={handleContinue}
