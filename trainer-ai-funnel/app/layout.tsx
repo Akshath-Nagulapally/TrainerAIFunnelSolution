@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import { Onest } from "next/font/google";
+import { GoogleTagManager } from '@next/third-parties/google';
 import "./globals.css";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ImagePreloader } from "@/components/ImagePreloader";
@@ -37,11 +38,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || ""} />
       <body className={`${onest.variable} font-sans antialiased bg-white`}>
         <OnboardingProvider>
           <Suspense fallback={null}>
             <MetaPixel />
           </Suspense>
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GTM_ID || 'GTM-58WZLPM7'}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
           <noscript>
             <img
               height="1"
